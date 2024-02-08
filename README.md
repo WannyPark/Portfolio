@@ -1,5 +1,3 @@
-# Welcome !! It's my first Project !
-1. dynamic web project in eclipse
-2. use mariaDB
-3. jsp(frontend) and java(backend)
-4. use naver map API
+# 포트폴리오
+1. 어디가(jsp)
+2. 걔모임(spring-legacy / react 애견인 커뮤니티 사이트)
