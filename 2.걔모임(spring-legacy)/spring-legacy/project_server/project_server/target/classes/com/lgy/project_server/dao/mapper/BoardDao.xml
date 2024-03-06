@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.lgy.project_server.dao.BoardDao">
+	
+	<select id="getBoardListPaging" parameterType="int" resultType="com.lgy.project_server.dto.BoardDto">
+	    <![CDATA[
+	        SELECT * 
+	        FROM (
+	            SELECT 
+	                ROWNUM AS rnum, 
+	                BOARD_ID, 
+                    MEMBER_MEM_ID, 
+                    MEMBER_MEM_NNAME, 
+                    BOARD_TITLE, 
+                    BOARD_DESC,
+                    BOARD_CATE,
+                    BOARD_IMG_NAME1,
+                    BOARD_IMG_NAME2,
+                    BOARD_IMG_BYTE,
+                    BOARD_DATE,
+                    BOARD_VIEW
+	            FROM (
+	                SELECT 
+	                    BOARD_ID, 
+	                    MEMBER_MEM_ID, 
+	                    MEMBER_MEM_NNAME, 
+	                    BOARD_TITLE, 
+	                    BOARD_DESC,
+	                    BOARD_CATE,
+	                    BOARD_IMG_NAME1,
+	                    BOARD_IMG_NAME2,
+	                    BOARD_IMG_BYTE,
+	                    BOARD_DATE,
+	                    BOARD_VIEW
+	                FROM BOARD 
+	                ORDER BY TO_NUMBER(BOARD_ID) DESC
+	            )
+	            WHERE ROWNUM <= #{end}
+	        )
+	        WHERE rnum >= #{start} AND rnum <= #{end}
+	    ]]>
+	</select>
+	
+	<select id="getBoardWriter" parameterType="java.util.Map" resultType="com.lgy.project_server.dto.BoardDto">
+		<![CDATA[
+		  SELECT * 
+		  FROM (
+		    SELECT 
+		      ROWNUM AS rnum, 
+		      BOARD_ID, 
+		      MEMBER_MEM_ID, 
+		      MEMBER_MEM_NNAME, 
+		      BOARD_TITLE, 
+		      BOARD_DESC,
+		      BOARD_CATE,
+		      BOARD_IMG_NAME1,
+		      BOARD_IMG_NAME2,
+		      BOARD_IMG_EXT,
+		      BOARD_IMG_BYTE,
+		      BOARD_DATE,
+		      BOARD_VIEW
+		    FROM (
+		      SELECT 
+				  BOARD_ID, 
+			      MEMBER_MEM_ID, 
+			      MEMBER_MEM_NNAME, 
+			      BOARD_TITLE, 
+			      BOARD_DESC,
+			      BOARD_CATE,
+			      BOARD_IMG_NAME1,
+			      BOARD_IMG_NAME2,
+			      BOARD_IMG_EXT,
+			      BOARD_IMG_BYTE,
+			      BOARD_DATE,
+			      BOARD_VIEW
+		      FROM BOARD
+		      WHERE 
+		      	UPPER(MEMBER_MEM_NNAME) LIKE '%' || UPPER(#{searchVal}) || '%'
+		        OR UPPER(MEMBER_MEM_NNAME) LIKE UPPER(#{searchVal}) || '%'
+		        OR UPPER(MEMBER_MEM_NNAME) LIKE '%' || UPPER(#{searchVal})
+		      ORDER BY TO_NUMBER(BOARD_ID) DESC
+		    )
+		    WHERE ROWNUM <= #{end}
+		  )
+		  WHERE rnum BETWEEN #{start} AND #{end}
+		]]>
+	</select>
+	
+	<select id="getBoardTitle" parameterType="java.util.Map" resultType="com.lgy.project_server.dto.BoardDto">
+ 	    <![CDATA[
+	        SELECT * 
+	        FROM (
+	            SELECT 
+	                ROWNUM AS rnum, 
+	                BOARD_ID, 
+			        MEMBER_MEM_ID, 
+			        MEMBER_MEM_NNAME, 
+			        BOARD_TITLE, 
+			        BOARD_DESC,
+			        BOARD_CATE,
+			        BOARD_IMG_NAME1,
+			        BOARD_IMG_NAME2,
+			        BOARD_IMG_EXT,
+			        BOARD_IMG_BYTE,
+			        BOARD_DATE,
+			        BOARD_VIEW
+	            FROM (
+	                SELECT 
+	                    BOARD_ID, 
+				        MEMBER_MEM_ID, 
+				        MEMBER_MEM_NNAME, 
+				        BOARD_TITLE, 
+				        BOARD_DESC,
+				        BOARD_CATE,
+				        BOARD_IMG_NAME1,
+				        BOARD_IMG_NAME2,
+				        BOARD_IMG_EXT,
+				        BOARD_IMG_BYTE,
+				        BOARD_DATE,
+				        BOARD_VIEW
+	                FROM BOARD
+	                WHERE BOARD_TITLE LIKE '%' || #{searchVal} || '%'
+	                OR BOARD_TITLE LIKE '%' || #{searchVal}
+	                OR BOARD_TITLE LIKE #{searchVal} || '%'
+	                ORDER BY TO_NUMBER(BOARD_ID) DESC
+	            )
+	            WHERE ROWNUM <= #{end}
+	        )
+	        WHERE rnum >= #{start} AND rnum <= #{end}
+	    ]]>
+	</select>
+	
+	<select id="getCateMenu1" parameterType="java.util.Map" resultType="com.lgy.project_server.dto.BoardDto">
+	    <![CDATA[
+	        SELECT *
+	        FROM (
+	            SELECT
+	                BOARD_ID, 
+			        MEMBER_MEM_ID, 
+			        MEMBER_MEM_NNAME, 
+			        BOARD_TITLE, 
+			        BOARD_DESC,
+			        BOARD_CATE,
+			        BOARD_IMG_NAME1,
+			        BOARD_IMG_NAME2,
+			        BOARD_IMG_EXT,
+			        BOARD_IMG_BYTE,
+			        BOARD_DATE,
+			        BOARD_VIEW
+	                ROWNUM AS rnum
+	            FROM (
+	                SELECT
+		                BOARD_ID, 
+				        MEMBER_MEM_ID, 
+				        MEMBER_MEM_NNAME, 
+				        BOARD_TITLE, 
+				        BOARD_DESC,
+				        BOARD_CATE,
+				        BOARD_IMG_NAME1,
+				        BOARD_IMG_NAME2,
+				        BOARD_IMG_EXT,
+				        BOARD_IMG_BYTE,
+				        BOARD_DATE,
+				        BOARD_VIEW
+	                FROM BOARD
+	                WHERE BOARD_CATE = #{catemenu}
+	                ORDER BY TO_NUMBER(BOARD_ID) DESC
+	            )
+	            WHERE ROWNUM <= TO_NUMBER(#{end})
+	        )
+	        WHERE rnum >= TO_NUMBER(#{start})
+	    ]]>
+	</select>
+	<select id="getCateMenu2" parameterType="java.util.Map" resultType="com.lgy.project_server.dto.BoardDto">
+		 <![CDATA[
+	        SELECT *
+	        FROM (
+	            SELECT
+	                BOARD_ID, 
+			        MEMBER_MEM_ID, 
+			        MEMBER_MEM_NNAME, 
+			        BOARD_TITLE, 
+			        BOARD_DESC,
+			        BOARD_CATE,
+			        BOARD_IMG_NAME1,
+			        BOARD_IMG_NAME2,
+			        BOARD_IMG_EXT,
+			        BOARD_IMG_BYTE,
+			        BOARD_DATE,
+			        BOARD_VIEW,
+	                ROWNUM AS rnum
+	            FROM (
+	                SELECT
+	                    BOARD_ID, 
+				        MEMBER_MEM_ID, 
+				        MEMBER_MEM_NNAME, 
+				        BOARD_TITLE, 
+				        BOARD_DESC,
+				        BOARD_CATE,
+				        BOARD_IMG_NAME1,
+				        BOARD_IMG_NAME2,
+				        BOARD_IMG_EXT,
+				        BOARD_IMG_BYTE,
+				        BOARD_DATE,
+				        BOARD_VIEW
+	                FROM BOARD
+	                WHERE BOARD_CATE = #{catemenu}
+	                ORDER BY TO_NUMBER(BOARD_ID) DESC
+	            )
+	            WHERE ROWNUM <= TO_NUMBER(#{end})
+	        )
+	        WHERE rnum >= TO_NUMBER(#{start})
+	    ]]>
+	</select>
+	<select id="getCateMenu3" parameterType="java.util.Map" resultType="com.lgy.project_server.dto.BoardDto">
+		 <![CDATA[
+	        SELECT *
+	        FROM (
+	            SELECT
+	                BOARD_ID, 
+			        MEMBER_MEM_ID, 
+			        MEMBER_MEM_NNAME, 
+			        BOARD_TITLE, 
+			        BOARD_DESC,
+			        BOARD_CATE,
+			        BOARD_IMG_NAME1,
+			        BOARD_IMG_NAME2,
+			        BOARD_IMG_EXT,
+			        BOARD_IMG_BYTE,
+			        BOARD_DATE,
+			        BOARD_VIEW,
+	                ROWNUM AS rnum
+	            FROM (
+	                SELECT
+	                    BOARD_ID, 
+				        MEMBER_MEM_ID, 
+				        MEMBER_MEM_NNAME, 
+				        BOARD_TITLE, 
+				        BOARD_DESC,
+				        BOARD_CATE,
+				        BOARD_IMG_NAME1,
+				        BOARD_IMG_NAME2,
+				        BOARD_IMG_EXT,
+				        BOARD_IMG_BYTE,
+				        BOARD_DATE,
+				        BOARD_VIEW
+	                FROM BOARD
+	                WHERE BOARD_CATE = #{catemenu}
+	                ORDER BY TO_NUMBER(BOARD_ID) DESC
+	            )
+	            WHERE ROWNUM <= TO_NUMBER(#{end})
+	        )
+	        WHERE rnum >= TO_NUMBER(#{start})
+	    ]]>
+	</select>
+	
+	<select id="getCSearch" parameterType="java.util.Map" resultType="com.lgy.project_server.dto.BoardDto">
+     	<![CDATA[
+	        SELECT *
+			FROM (
+			    SELECT 
+			        BOARD_ID, 
+			        MEMBER_MEM_ID, 
+			        MEMBER_MEM_NNAME, 
+			        BOARD_TITLE, 
+			        BOARD_DESC,
+			        BOARD_CATE,
+			        BOARD_IMG_NAME1,
+			        BOARD_IMG_NAME2,
+			        BOARD_IMG_EXT,
+			        BOARD_IMG_BYTE,
+			        BOARD_DATE,
+			        BOARD_VIEW,
+			        ROWNUM AS rnum
+			    FROM (
+			        SELECT
+			            BOARD_ID, 
+				        MEMBER_MEM_ID, 
+				        MEMBER_MEM_NNAME, 
+				        BOARD_TITLE, 
+				        BOARD_DESC,
+				        BOARD_CATE,
+				        BOARD_IMG_NAME1,
+				        BOARD_IMG_NAME2,
+				        BOARD_IMG_EXT,
+				        BOARD_IMG_BYTE,
+				        BOARD_DATE,
+				        BOARD_VIEW
+			        FROM BOARD
+			        WHERE BOARD_CATE = #{catemenu2}
+			        ORDER BY TO_NUMBER(BOARD_ID) DESC
+			    )
+			    WHERE 
+			        UPPER (${cateSelec}) LIKE '%' || UPPER(#{cateVal}) || '%'
+			        OR UPPER (${cateSelec}) LIKE UPPER(#{cateVal}) || '%'
+			        OR UPPER (${cateSelec}) LIKE '%' || UPPER(#{cateVal})
+			
+			)
+			WHERE rnum <= TO_NUMBER(#{end}) AND rnum >= TO_NUMBER(#{start})
+	    ]]>
+	</select>
+	
+	<select id="getHit" resultType="com.lgy.project_server.dto.BoardDto">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT board.*,
+                   ROW_NUMBER() OVER (ORDER BY TO_NUMBER(BOARD_VIEW) DESC, TO_NUMBER(BOARD_ID) DESC) AS rnum
+            FROM BOARD board
+        ) WHERE rnum <= 5
+        ]]>
+    </select>
+    
+    <select id="contentView" parameterType="String" resultType="com.lgy.project_server.dto.BoardDto">
+    	SELECT
+    		BOARD_ID, 
+	        MEMBER_MEM_ID, 
+	        MEMBER_MEM_NNAME, 
+	        BOARD_TITLE, 
+	        BOARD_DESC,
+	        BOARD_CATE,
+	        BOARD_IMG_NAME1,
+	        BOARD_IMG_NAME2,
+	        BOARD_IMG_EXT,
+	        BOARD_IMG_BYTE,
+	        BOARD_DATE,
+	        BOARD_VIEW
+    	FROM BOARD WHERE BOARD_ID=#{id}
+    </select>
+    
+    <update id="increView" parameterType="String">
+    	UPDATE BOARD SET BOARD_VIEW=BOARD_VIEW+1 WHERE BOARD_ID=#{id}
+    </update>
+    
+    <insert id="uploadBoard" parameterType="java.util.Map">
+    	INSERT INTO BOARD VALUES(BOARD_SEQ.NEXTVAL, #{mem_id}, #{mem_Nname}, #{title}, #{desc}, #{category}, SYSDATE, 0, #{file1}, #{file2}, #{fileExt}, ${fileSize})
+    </insert>
+    
+    <insert id="uploadBoardNoFile" parameterType="java.util.Map">
+    	INSERT INTO BOARD(BOARD_ID, MEMBER_MEM_ID, MEMBER_MEM_NNAME, BOARD_TITLE, BOARD_DESC, BOARD_CATE, BOARD_DATE, BOARD_VIEW) 
+    	VALUES(BOARD_SEQ.NEXTVAL, #{mem_id}, #{mem_Nname}, #{title}, #{desc}, #{category}, SYSDATE, 0)
+    </insert>
+    
+    <update id="modifyBoard" parameterType="hashmap">
+    	UPDATE BOARD SET "BOARD_TITLE"=#{title}, "BOARD_DESC"=#{content} WHERE "BOARD_ID"=#{id}
+    </update>
+    
+    <delete id="deleteBoard" parameterType="hashmap">
+    	DELETE FROM BOARD WHERE "BOARD_ID"=#{id}
+    </delete>
+	
+</mapper>

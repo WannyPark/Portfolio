@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.lgy.project_server.dao.MemDao">
+	
+	<select id="getMem" parameterType="String" resultType="com.lgy.project_server.dto.MemDto">
+		SELECT MEM_ID
+		      ,MEM_PW
+		      ,MEM_NAME
+		      ,MEM_NNAME
+		      ,MEM_EMAIL
+		      ,MEM_ADDR1
+		      ,MEM_ADDR2
+		      ,MEM_NUM
+		      ,MEM_BIR
+		      ,MEM_GAT1_ID
+		      ,MEM_GAT2_ID
+		      ,MEM_GAT3_ID
+		FROM MEMBER
+		WHERE MEM_ID=#{id}
+	</select>
+	
+	<insert id="addMem" parameterType="com.lgy.project_server.dto.MemDto">
+    	insert into member(mem_id, mem_pw, mem_email, mem_num, mem_name, mem_nname, mem_bir, mem_addr1, mem_addr2)
+    	 values(#{mem_id}, #{mem_pw}, #{mem_email}, #{mem_num}, #{mem_name}, #{mem_nname}, #{mem_bir}, #{mem_addr1}, #{mem_addr2})
+    </insert>
+    
+    <update id="modiPw" parameterType="String">
+    	UPDATE MEMBER SET MEM_PW=#{newPw} WHERE MEM_ID=#{id}
+    </update>
+    
+    <update id="modiNname" parameterType="String">
+    	UPDATE MEMBER SET MEM_NNAME=#{newNname} WHERE MEM_ID=#{id}
+    </update>
+    
+    <update id="modiNum" parameterType="String">
+    	UPDATE MEMBER SET MEM_NUM=#{newNum} WHERE MEM_ID=#{id}
+    </update>
+    
+    <update id="modiAddr" parameterType="String">
+    	UPDATE MEMBER SET MEM_ADDR1=#{newAddr1}, MEM_ADDR2=#{newAddr2} WHERE MEM_ID=#{id}
+    </update>
+    
+    <update id="newEmail" parameterType="String">
+    	UPDATE MEMBER SET MEM_EMAIL=#{newEmail} WHERE MEM_ID=#{id}
+    </update>
+    
+    <select id="getmail" parameterType="string" resultType="com.lgy.project_server.dto.MemDto">
+		SELECT MEM_ID,MEM_NAME,MEM_EMAIL FROM MEMBER WHERE MEM_ID=#{id}
+	</select>
+	
+</mapper>

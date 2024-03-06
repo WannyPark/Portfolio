@@ -1,0 +1,39 @@
+* {
+	margin: 0;
+	paddgin: 0;
+}
+
+.nav_atag {
+	text-decoration: none;
+	color: white;
+}
+
+.navbar {
+	height:25px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #263343;
+	padding: 8px 12px;
+}
+
+img {
+	height:35px;
+}
+
+.navbar_menu {
+	display: flex;
+	list-style: none;
+}
+
+.navbar_menu li {
+	margin-left: 30px;
+}
+
+.login_Box {
+	display: inline-block;
+	width: 300px;
+	height: 150px;
+	border: 2px solid #263343;
+	
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.lgy.project_server.dao.DogDao">
+	
+	<insert id="register" parameterType="hashmap">
+		INSERT INTO DOG(DOG_ID, MEMBER_MEM_ID, MEMBER_MEM_NNAME, DOG_KIND, DOG_NAME, DOG_AGE, DOG_BIR, DOG_GENDER) VALUES(#{mem_id} || #{name}, #{mem_id}, #{mem_nname}, #{kind}, #{name}, #{age}, #{birthday}, #{gender})
+	</insert>
+	
+	<update id="register_file" parameterType="String">
+		UPDATE DOG SET DOG_FILE_NAME1=#{file_name1}, DOG_FILE_NAME2=#{file_name2}, DOG_FILE_EXT=#{file_ext}, DOG_FILE_BYTE=${file_size} WHERE MEMBER_MEM_ID=#{id} AND DOG_NAME=#{dogName}
+	</update>
+	
+	<select id="getDogs" parameterType="String" resultType="com.lgy.project_server.dto.DogDto">
+		SELECT DOG_ID
+			  ,MEMBER_MEM_ID
+			  ,MEMBER_MEM_NNAME
+			  ,DOG_NAME
+			  ,DOG_AGE
+			  ,DOG_KIND
+			  ,DOG_BIR
+			  ,DOG_GENDER
+			  ,DOG_FILE_NAME1
+			  ,DOG_FILE_NAME2
+			  ,DOG_FILE_EXT
+			  ,DOG_FILE_BYTE
+		FROM DOG WHERE MEMBER_MEM_ID=#{id}
+	</select>
+	
+	<delete id="removeDog" parameterType="String">
+		DELETE FROM DOG WHERE MEMBER_MEM_ID=#{id} AND DOG_NAME=#{dogName}
+	</delete>
+	
+</mapper>

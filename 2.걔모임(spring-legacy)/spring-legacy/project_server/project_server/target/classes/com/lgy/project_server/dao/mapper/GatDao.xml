@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.lgy.project_server.dao.GatDao">
+	
+	<select id="getGat" parameterType="String" resultType="hashmap">
+		<![CDATA[
+			SELECT * 
+			FROM (
+				SELECT * FROM gathering where gat_title like '%${search}%' OR gat_title like '%${search}' OR gat_title like '${search}%' ORDER BY GAT_VIEW DESC
+			)
+		]]>
+	</select>
+	
+	<select id="searchAll" resultType="hashmap">
+		SELECT * FROM GATHERING ORDER BY GAT_VIEW DESC
+	</select>
+	
+	<select id="getTotalPage" resultType="_int">
+		SELECT COUNT(*) FROM GATHERING
+	</select>
+	
+	<select id="getMemGat" parameterType="String" resultType="hashmap">
+		SELECT * FROM GAT_MEMBERS WHERE MEMBER_MEM_ID=#{id}
+	</select>
+	
+	<select id="locationGats" parameterType="String" resultType="hashmap">
+		SELECT * FROM GATHERING WHERE GAT_LOCATION1=#{location1} AND GAT_LOCATION2=#{location2} ORDER BY GAT_VIEW DESC
+	</select>
+	
+	<insert id="makeGat" parameterType="java.util.Map">
+		INSERT INTO GATHERING(
+				GAT_ID,
+				MEMBER_MEM_ID,
+				MEMBER_MEM_NNAME,
+				GAT_TITLE,
+				GAT_DESC,
+				GAT_DATE,
+				GAT_VIEW,
+				GAT_MEMNUM,
+				GAT_LOCATION1,
+				GAT_LOCATION2,
+				GAT_IMG_NAME1,
+				GAT_IMG_NAME2,
+				GAT_IMG_EXT,
+				GAT_IMG_BYTE)
+			VALUES(
+				GATHERING_SEQ.NEXTVAL,
+				#{mem_id},
+				#{mem_nName},
+				#{title},
+				#{desc},
+				SYSDATE,
+				0,
+				1,
+				#{location1},
+				#{location2},
+				#{file1},
+				#{file2},
+				#{fileExt},
+				${fileSize})
+	</insert>
+	
+	<insert id="makeGatNoFile" parameterType="java.util.Map">
+		INSERT INTO GATHERING(
+				GAT_ID,
+				MEMBER_MEM_ID,
+				MEMBER_MEM_NNAME,
+				GAT_TITLE,
+				GAT_DESC,
+				GAT_DATE,
+				GAT_VIEW,
+				GAT_MEMNUM,
+				GAT_LOCATION1,
+				GAT_LOCATION2,
+				GAT_IMG_NAME1)
+			VALUES(
+				GATHERING_SEQ.NEXTVAL,
+				#{mem_id},
+				#{mem_nName},
+				#{title},
+				#{desc},
+				SYSDATE,
+				0,
+				1,
+				#{location1},
+				#{location2},
+				'noImg')
+	</insert>
+	
+	<insert id="addGatLeader" parameterType="String">
+		<selectKey keyProperty="no" order="BEFORE" resultType="long">
+			SELECT LAST_NUMBER-1 FROM USER_SEQUENCES WHERE SEQUENCE_NAME='GATHERING_SEQ'
+		</selectKey>
+		INSERT INTO GAT_MEMBERS VALUES('${no}', #{title}, #{mem_id}, #{mem_nName})
+	</insert>
+	
+	<select id="gatInfo" parameterType="String" resultType="com.lgy.project_server.dto.GatDto">
+		SELECT * FROM GATHERING WHERE GAT_ID=#{id}
+	</select>
+	
+	<update id="increGatView" parameterType="String">
+		UPDATE GATHERING SET GAT_VIEW=GAT_VIEW+1 WHERE GAT_ID=#{id}
+	</update>
+	
+	<update id="increGatMemsNum" parameterType="String">
+		UPDATE GATHERING SET GAT_MEMNUM=GAT_MEMNUM+1 WHERE GAT_ID=#{id}
+	</update>
+	
+	<select id="gatMems" parameterType="String" resultType="com.lgy.project_server.dto.GatMemDto">
+		SELECT * FROM GAT_MEMBERS WHERE GATHERING_GAT_ID=#{id}
+	</select>
+	
+	<select id="gatPlans" parameterType="String" resultType="com.lgy.project_server.dto.GatPlanDto">
+		SELECT * FROM GAT_PLAN WHERE GATHERING_GAT_ID=#{id} ORDER BY GAT_PLAN_DATE
+	</select>
+	
+	<select id="gatChat" parameterType="String" resultType="com.lgy.project_server.dto.GatChatDto">
+		SELECT * FROM GAT_CHAT WHERE GATHERING_GAT_ID=#{id} ORDER BY GAT_CHAT_DATE DESC
+	</select>
+	
+	<insert id="joinGat" parameterType="String">
+		INSERT INTO GAT_MEMBERS VALUES(#{gat_id}, #{gat_title}, #{mem_id}, #{mem_nName})
+	</insert>
+	
+	<insert id="addChat" parameterType="String">
+		INSERT INTO GAT_CHAT VALUES(#{gat_id}, #{mem_id}, #{mem_nName}, #{comments}, SYSTIMESTAMP)
+	</insert>
+	
+	<update id="modifyGat" parameterType="hashmap">
+    	UPDATE GATHERING SET GAT_TITLE=#{title}, GAT_DESC=#{content} WHERE GAT_ID=#{id}
+    </update>
+    
+    <delete id="deleteGat" parameterType="hashmap">
+    	DELETE FROM GATHERING WHERE GAT_ID=#{gat_id}
+    </delete>
+    
+    <delete id="deleteGatP" parameterType="hashmap">
+    	DELETE FROM GAT_PLAN WHERE GATHERING_GAT_ID=#{gat_id}
+    </delete>
+    
+    <delete id="deleteGatC" parameterType="hashmap">
+    	DELETE FROM GAT_CHAT WHERE GATHERING_GAT_ID=#{gat_id}
+    </delete>
+    
+    <delete id="deleteGatM" parameterType="hashmap">
+    	DELETE FROM GAT_MEMBERS WHERE GATHERING_GAT_ID=#{gat_id}
+    </delete>
+    
+    <insert id="addPlan" parameterType="hashmap">
+    	INSERT INTO GAT_PLAN VALUES(GATPLAN_SEQ.NEXTVAL, #{mem_nName}, #{gat_id}, #{plan_date}, #{plan_addr}, #{plan_title}, #{plan_desc})
+    </insert>
+    
+    <select id="getPlan" parameterType="hashmap" resultType="com.lgy.project_server.dto.GatPlanDto">
+    	SELECT * FROM GAT_PLAN WHERE GAT_PLAN_ID=#{gat_plan_id}
+    </select>
+    
+    <delete id="delPlan" parameterType="hashmap">
+    	DELETE FROM GAT_PLAN WHERE GAT_PLAN_ID=#{gat_plan_id}
+    </delete>
+    
+</mapper>

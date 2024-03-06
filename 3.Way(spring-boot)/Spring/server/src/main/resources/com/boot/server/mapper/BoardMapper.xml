@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.boot.server.mapper.BoardMapper">
+
+<!--    게시물 보기(검색 x)-->
+    <select id="getBoard" resultType="Board">
+        SELECT board_no
+              ,user_no
+              ,board_title
+              ,board_desc
+              ,board_loc1
+              ,board_loc2
+              ,board_like
+              ,board_origin_image_name
+              ,board_save_image_name
+              ,board_save_image_ext
+              ,board_save_image_size
+              ,board_reg_date
+              ,board_upd_date FROM board ORDER BY board_reg_date DESC LIMIT ${page},6
+    </select>
+
+<!--    게시물 모든 조건 검색-->
+    <select id="getBoardAllOption" resultType="Board">
+        SELECT board_no
+              ,user_no
+              ,board_title
+              ,board_desc
+              ,board_loc1
+              ,board_loc2
+              ,board_like
+              ,board_origin_image_name
+              ,board_save_image_name
+              ,board_save_image_ext
+              ,board_save_image_size
+              ,board_reg_date
+              ,board_upd_date FROM board
+              WHERE board_title LIKE '%${title}%' AND
+                    user_no = ${userNo} AND
+                    board_loc1 = #{loc1} AND
+                    board_loc2 = #{loc2}
+              ORDER BY board_reg_date DESC LIMIT ${page},6
+    </select>
+
+<!--    게시물 제목 + 지역 검색-->
+    <select id="getBoardTitleLoc" resultType="Board">
+        SELECT board_no
+              ,user_no
+              ,board_title
+              ,board_desc
+              ,board_loc1
+              ,board_loc2
+              ,board_like
+              ,board_origin_image_name
+              ,board_save_image_name
+              ,board_save_image_ext
+              ,board_save_image_size
+              ,board_reg_date
+              ,board_upd_date FROM board
+              WHERE board_title LIKE '%${title}%' AND
+                    board_loc1 = #{loc1} AND
+                    board_loc2 = #{loc2}
+              ORDER BY board_reg_date DESC LIMIT ${page},6
+    </select>
+
+<!--    게시물 이름 + 지역 검색-->
+    <select id="getBoardNameLoc" resultType="Board">
+        SELECT board_no
+        ,user_no
+        ,board_title
+        ,board_desc
+        ,board_loc1
+        ,board_loc2
+        ,board_like
+        ,board_origin_image_name
+        ,board_save_image_name
+        ,board_save_image_ext
+        ,board_save_image_size
+        ,board_reg_date
+        ,board_upd_date FROM board
+        WHERE user_no = ${userNo} AND
+        board_loc1 = #{loc1} AND
+        board_loc2 = #{loc2}
+        ORDER BY board_reg_date DESC LIMIT ${page},6
+    </select>
+
+<!--    게시물 제목 + 지역(시/도) 검색-->
+    <select id="getBoardTitleLoc1" resultType="Board">
+        SELECT board_no
+        ,user_no
+        ,board_title
+        ,board_desc
+        ,board_loc1
+        ,board_loc2
+        ,board_like
+        ,board_origin_image_name
+        ,board_save_image_name
+        ,board_save_image_ext
+        ,board_save_image_size
+        ,board_reg_date
+        ,board_upd_date FROM board
+        WHERE board_title LIKE '%${title}%' AND
+        board_loc1 = #{loc1}
+        ORDER BY board_reg_date DESC LIMIT ${page},6
+    </select>
+
+<!--    게시물 이름 + 지역(시/도) 검색-->
+    <select id="getBoardNameLoc1" resultType="Board">
+        SELECT board_no
+        ,user_no
+        ,board_title
+        ,board_desc
+        ,board_loc1
+        ,board_loc2
+        ,board_like
+        ,board_origin_image_name
+        ,board_save_image_name
+        ,board_save_image_ext
+        ,board_save_image_size
+        ,board_reg_date
+        ,board_upd_date FROM board
+        WHERE user_no = ${userNo} AND
+        board_loc1 = #{loc1}
+        ORDER BY board_reg_date DESC LIMIT ${page},6
+    </select>
+
+<!--    게시물 제목 검색-->
+    <select id="getBoardTitle" resultType="Board">
+        SELECT board_no
+        ,user_no
+        ,board_title
+        ,board_desc
+        ,board_loc1
+        ,board_loc2
+        ,board_like
+        ,board_origin_image_name
+        ,board_save_image_name
+        ,board_save_image_ext
+        ,board_save_image_size
+        ,board_reg_date
+        ,board_upd_date FROM board
+        WHERE board_title LIKE '%${title}%'
+        ORDER BY board_reg_date DESC LIMIT ${page},6
+    </select>
+
+<!--    게시물 이름 검색-->
+    <select id="getBoardName" resultType="Board">
+        SELECT board_no
+        ,user_no
+        ,board_title
+        ,board_desc
+        ,board_loc1
+        ,board_loc2
+        ,board_like
+        ,board_origin_image_name
+        ,board_save_image_name
+        ,board_save_image_ext
+        ,board_save_image_size
+        ,board_reg_date
+        ,board_upd_date FROM board
+        WHERE user_no = ${userNo}
+        ORDER BY board_reg_date DESC LIMIT ${page},6
+    </select>
+
+<!--    게시물 지역 검색-->
+    <select id="getBoardLoc" resultType="Board">
+        SELECT board_no
+        ,user_no
+        ,board_title
+        ,board_desc
+        ,board_loc1
+        ,board_loc2
+        ,board_like
+        ,board_origin_image_name
+        ,board_save_image_name
+        ,board_save_image_ext
+        ,board_save_image_size
+        ,board_reg_date
+        ,board_upd_date FROM board
+        WHERE board_loc1 = #{loc1} AND
+        board_loc2 = #{loc2}
+        ORDER BY board_reg_date DESC LIMIT ${page},6
+    </select>
+
+<!--    게시물 지역(시/도) 검색-->
+    <select id="getBoardLoc1" resultType="Board">
+        SELECT board_no
+        ,user_no
+        ,board_title
+        ,board_desc
+        ,board_loc1
+        ,board_loc2
+        ,board_like
+        ,board_origin_image_name
+        ,board_save_image_name
+        ,board_save_image_ext
+        ,board_save_image_size
+        ,board_reg_date
+        ,board_upd_date FROM board
+        WHERE board_loc1 = #{loc1}
+        ORDER BY board_reg_date DESC LIMIT ${page},6
+    </select>
+
+<!--    게시물 자세히 보기-->
+    <select id="getBoardInfo" resultType="Board">
+        SELECT board_no
+        ,user_no
+        ,board_title
+        ,board_desc
+        ,board_loc1
+        ,board_loc2
+        ,board_like
+        ,board_origin_image_name
+        ,board_save_image_name
+        ,board_save_image_ext
+        ,board_save_image_size
+        ,board_reg_date
+        ,board_upd_date FROM board WHERE board_no=${boardNo}
+    </select>
+
+<!--    게시글 이미지 요청-->
+    <select id="getBoardImages" resultType="BoardImg">
+        SELECT board_no
+        ,board_origin_image_name
+        ,board_save_image_name
+        ,board_save_image_ext
+        ,board_save_image_size FROM board_images WHERE board_no=${boardNo}
+    </select>
+
+<!--    게시글 좋아요-->
+    <update id="like">
+        UPDATE board SET board_like = board_like + 1 WHERE board_no = ${boardNo}
+    </update>
+
+<!--    유저 좋아요 추가-->
+    <insert id="userLike">
+        INSERT INTO user_like_board VALUES(${userNo}, ${boardNo})
+    </insert>
+
+<!--    유저 좋아요 목록 가져오기-->
+    <select id="likeBoard" resultType="UserLikeBoard">
+        SELECT * FROM user_like_board WHERE user_no = ${userId}
+    </select>
+
+    <!--    게시글 등록-->
+    <select id="write" resultType="integer">
+        INSERT INTO board( user_no, board_title, board_desc, board_loc1, board_loc2 )
+        VALUES ( #{userNo}, #{boardTitle}, #{boardDesc}, #{boardLoc1}, #{boardLoc2} )
+        RETURNING board_no
+    </select>
+
+<!--    게시글 이미지 등록-->
+    <insert id="imgWrite">
+        INSERT INTO board_images ( board_no, board_origin_image_name, board_save_image_name, board_save_image_ext, board_save_image_size )
+        VALUES ( #{boardNo}, #{originName}, #{saveName}, #{imgExt}, ${fileSize} )
+    </insert>
+
+<!--    대표이미지 등록-->
+    <update id="logoWrite">
+        UPDATE board SET board_origin_image_name = #{originName}, board_save_image_name = #{saveName}, board_save_image_ext = #{imgExt}, board_save_image_size = ${fileSize}
+        WHERE board_no = ${boardNo}
+    </update>
+
+<!--    게시글 수정-->
+    <update id="modifyBoard">
+        UPDATE board SET board_title = #{boardTitle}, board_desc = #{boardDesc} WHERE board_no = ${boardNo}
+    </update>
+
+<!--    게시글 삭제-->
+    <delete id="deleteBoard">
+        DELETE FROM board WHERE board_no = ${boardNo}
+    </delete>
+
+<!--    게시글 이미지 삭제-->
+    <delete id="deleteBoardImg">
+        DELETE FROM board_images WHERE board_no = ${boardNo}
+    </delete>
+
+<!--    게시글 좋아요 삭제-->
+    <delete id="deleteBoardLike">
+        DELETE FROM user_like_board WHERE board_no = ${boardNo}
+    </delete>
+
+</mapper>
