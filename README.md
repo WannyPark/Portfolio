@@ -18,6 +18,6 @@
 
 # Way
 1. 개인 프로젝트
-2. 작업기간: 24.02.19 ~ ing
+2. 작업기간: 2주
 3. spring-boot, react 간의 Rest API 통신 방식으로 맛집추천 커뮤니티 사이트 작업
 4. Maria DB, Mybatis 사용
