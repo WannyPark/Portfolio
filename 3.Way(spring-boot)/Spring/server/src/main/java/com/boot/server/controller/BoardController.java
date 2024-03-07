@@ -171,9 +171,8 @@ public class BoardController {
     @PostMapping(value = "/imgWrite")
     public ResponseEntity<?> imgWrite(@RequestParam(value = "file") MultipartFile[] files, @RequestParam(value = "boardNo") String boardNo, @RequestParam(value = "logoInd") String logoInd) throws Exception {
         log.info("BoardController - imgWrite()");
-        log.info("logoInd ===> " + logoInd);
         int result = 0;
-        String UPLOAD_PATH = "C:\\Project\\project_way\\react\\way\\public\\images"; // 업로드 할 위치
+        String UPLOAD_PATH = "D:\\jiwhy\\dev\\project_where\\React\\way\\public\\images"; // 업로드 할 위치
 
         try {
             for(int i=0; i < files.length; i++) {
